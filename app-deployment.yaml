@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: app
+  name: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: app
+  template:
+    metadata:
+      labels:
+        network/cloudcomputing2024-default: "true"
+        service: app
+    spec:
+      containers:
+        - env:
+            - name: MYSQL_HOST
+              value: db
+          image: s02230401/s02230401-app
+          name: app
+          ports:
+            - containerPort: 5000
+              hostPort: 5000
+              protocol: TCP
+        - env:
+            - name: MYSQL_DATABASE
+              value: db_name
+            - name: MYSQL_PASSWORD
+              value: qwerty
+            - name: MYSQL_ROOT_PASSWORD
+              value: qwerty
+            - name: MYSQL_USER
+              value: not_root
+          image: s02230401/s02230401-db
+          name: db
+          ports:
+            - containerPort: 3306
+              hostPort: 3306
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: my-volume
+      restartPolicy: Always
+      volumes:
+        - name: my-volume
+          persistentVolumeClaim:
+            claimName: my-volume

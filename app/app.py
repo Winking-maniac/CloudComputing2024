@@ -1,6 +1,7 @@
 from flask import Flask
 #import pymysql
 import mysql.connector
+import os
 
 app = Flask(__name__)
 
@@ -12,7 +13,7 @@ def hello_world():
 def db_select_all():
     res = ""
     connection = mysql.connector.connect(
-        host='0.0.0.0',
+        host="0.0.0.0",
         user='not_root',
         password='qwerty',
         database='db_name',
